@@ -10,17 +10,35 @@ let inv_percentage,
   inc_array = [],
   exp_array = [],
   newobj;
+
+//==========================================================> EventListeners
+
 add_btn.addEventListener('click', get_input_btn);
 description.addEventListener('keypress', get_input);
 inc_exp.addEventListener('keypress', get_input);
+
+// =====================================================> Object
 
 let Income_expense = class {
   constructor(Description, Select, inc_exp) {
     this.Description = Description;
     this.Select = Select;
     this.inc_exp = inc_exp;
+    this.incoem;
   }
   where_to_print() {
+    let current_array;
+    if (this.Select === 'inc') {
+      current_array = inc_array;
+    }
+    if (this.Select === 'exp') {
+      current_array = exp_array;
+    }
+    current_array.push(this);
+    this.print_list();
+  }
+
+  print_list() {
     let sign, current_array, list_point, percentage_print;
     let formated_number = formatNumber(parseFloat(this.inc_exp));
     total_inc(this.Select, this.inc_exp);
@@ -36,44 +54,51 @@ let Income_expense = class {
       list_point = exp_list;
       percentage_print = `<div class="item__percentage">${inv_percentage}</div>`;
     }
-    const print_list = function (list_point, current_array) {
-      const htmlstring = current_array
-        .map(function (element) {
-          return `<div class="item clearfix" id="expense-0">
-        <div class="item__description">${element.Description}</div>
-        <div class="right clearfix">
-        <div class="item__value">${sign} ${formatNumber(element.inc_exp)}</div>
-        ${percentage_print}
-        <div class="item__delete">
-        <button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button>
-        </div>
-        </div>
-        </div>`;
-        })
-        .join('');
-      list_point.innerHTML = htmlstring;
-      console.log('PRINT');
-    };
-    current_array.push(this);
-    total_inc(this.Select, this.inc_exp);
-    print_list(list_point, current_array);
+    const htmlstring = current_array
+      .map(function (element) {
+        return `<div class="item clearfix" id="expense-0">
+      <div class="item__description">${element.Description}</div>
+      <div class="right clearfix">
+      <div class="item__value">${sign} ${formatNumber(element.inc_exp)}</div>
+      ${percentage_print}
+      <div class="item__delete">
+      <button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button>
+      </div>
+      </div>
+      </div>`;
+      })
+      .join('');
+    list_point.innerHTML = htmlstring;
+    console.log('PRINT');
     display_upperScreen(formated_number, this.Select, sign);
     this.rem_ind(current_array, this, list_point);
   }
 
-  rem_ind(array, elem, list_point) {
-    list_point.addEventListener('click', function (e) {
-      if (e.target.matches('i')) {
-        let current_node = e.target.parentNode.parentNode.parentNode.parentNode;
-        console.log('joseDaniel');
-        console.log(e.target.parentNode.parentNode.parentNode.parentNode);
-        array.splice(array.indexOf(elem), 1);
-        list_point.removeChild(current_node);
-        total_inc();
-      }
-    });
-  }
-};
+  // rem_ind(array, elem, list_point) {
+  //   list_point.addEventListener('click', function (e) {
+  //     if (e.target.matches('i')) {
+  //       let current_node = e.target.parentNode.parentNode.parentNode.parentNode;
+  //       console.log('joseDaniel');
+  //       console.log(e.target.parentNode.parentNode.parentNode.parentNode);
+  //       array.splice(array.indexOf(elem), 1);
+  //       list_point.removeChild(current_node);
+  //       total_inc();
+  //     }
+  //   });
+  // }
+
+//   rem_ind(array, elem, list_point) {
+//     list_point.addEventListener('click', function (e) {
+//       if (e.target.matches('i')) {
+//         array.splice(array.indexOf(elem), 1);
+//         total_inc();
+//         pr;
+//       }
+//     });
+//   }
+// };
+
+// ================================================> Functions Starts here
 
 function get_input_btn() {
   console.log(select.value);
